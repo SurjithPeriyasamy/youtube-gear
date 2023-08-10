@@ -26,7 +26,7 @@ export const withHighLikes = (VideoCard) => {
     const { statistics } = info;
     return (
       <div>
-        <label className="absolute bg-yellow-300 p-2 rounded-lg z-10 font-bold text-black">
+        <label className="absolute bg-yellow-300 p-2 rounded-lg z-0 font-bold text-black">
           ❤️ {statistics.likeCount}K Likes
         </label>
         <VideoCard info={info} />

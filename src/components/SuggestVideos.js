@@ -5,15 +5,15 @@ const SuggestVideos = ({ info }) => {
   const { title, channelTitle, thumbnails } = snippet;
 
   return (
-    <div className="flex m-2 p-4">
+    <div className="flex ">
       <img
         alt="suggest"
-        className="mx-2 w-60 rounded-lg"
+        className="mr-2 h-24 rounded-lg"
         src={thumbnails.medium.url}
       />
-      <ul className="flex flex-col justify-between">
-        <li className="font-bold text-sm">{title}</li>
-        <li className="font-normal text-">{channelTitle}</li>
+      <ul className="flex text-xs flex-col justify-between">
+        <li className="font-bold">{title}</li>
+        <li className="font-normal ">{channelTitle}</li>
         <li className="font-normal">{statistics.viewCount}K Views</li>
       </ul>
     </div>

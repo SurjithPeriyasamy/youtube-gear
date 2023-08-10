@@ -7,7 +7,7 @@ const VideoContainer = () => {
 
   const HighLikesCard = withHighLikes(VideoCard);
   return (
-    <div className="flex flex-wrap relative z-0">
+    <div className="flex flex-wrap">
       {videos.map((video) => (
         <Link
           className=" w-64 m-2 p-2 mr-2 shadow-lg rounded-lg"

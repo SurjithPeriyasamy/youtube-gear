@@ -19,23 +19,20 @@ const WatchPage = () => {
   const suggestionVideos = useVideosApi();
 
   return (
-    <div className="flex">
-      <div>
+    <div className="flex w-full flex-wrap lg:flex-nowrap">
+      <div className="w-full px-5 my-2">
         <iframe
-          width="1000"
-          height="550"
+          className="w-full aspect-video "
           src={"https://www.youtube.com/embed/" + searchParams.get("v")}
           title="YouTube video player"
-          frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
           autoPlay
         ></iframe>
       </div>
-
-      <div className="flex flex-col">
+      <div className="lg:basis-1/2 px-5 flex flex-col border border-gray-200 shadow-lg">
         {suggestionVideos.map((video) => (
-          <Link to={"/watch?v=" + video.id} key={video.id}>
+          <Link to={"/watch?v=" + video.id} className="my-2 p-1" key={video.id}>
             <SuggestVideos info={video} />
           </Link>
         ))}
