@@ -78,8 +78,8 @@ const Header = () => {
           />
         </Link>
       </div>
-      <form className="w-full relative col-span-4 pt-2 flex flex-col">
-        <div className="flex">
+      <div className="w-full relative col-span-4 pt-2 flex flex-col">
+        <form className="flex">
           <input
             placeholder="Search"
             className="w-full shadow-inner px-3 py-1 border border-gray-400 focus:outline-blue-300 rounded-l-full"
@@ -97,7 +97,7 @@ const Header = () => {
               />
             </button>
           </Link>
-        </div>
+        </form>
         {search !== "" && suggestion && (
           <div className="absolute top-12 w-[91%] left-0  bg-white py-2 shadow-lg rounded-lg border border-gray-200">
             <ul>
@@ -119,21 +119,21 @@ const Header = () => {
             </ul>
           </div>
         )}
-      </form>
+      </div>
       <div
         onClick={() => setShowSuggestion(false)}
-        className="relative flex justify-end col-span-4 p-1"
+        className="relative flex justify-end mr-[15%] col-span-4 p-1 "
       >
         <img
           onClick={() =>
             showLoginBox ? setShowLoginbox(false) : setShowLoginbox(true)
           }
-          className="h-8 float-right mr-[20%] rounded-full cursor-pointer"
+          className="center h-8 float-right rounded-full cursor-pointer"
           alt="User"
           src={login ? USER_PROFILE : DEFAULT_PROFILE}
         />
         {showLoginBox && (
-          <div className=" bg-gray-200 right-[30%] w-60 h-40 absolute rounded-lg shadow-2xl p-2">
+          <div className=" bg-gray-200 xl:top-0 top-full lg:right-[12%] w-60 h-40 absolute rounded-lg shadow-2xl p-2">
             {login ? (
               <div className="flex flex-col gap-y-3">
                 <div className="p-2 flex gap-3 items-center">
