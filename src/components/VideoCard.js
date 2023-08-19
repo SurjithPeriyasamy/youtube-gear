@@ -4,7 +4,6 @@ const VideoCard = ({ info }) => {
   //console.log(info);
   const { snippet, statistics } = info;
   const { channelTitle, thumbnails, title } = snippet;
-  //console.log(info);
   return (
     <div>
       <img

@@ -8,19 +8,21 @@ const VideoContainer = () => {
   const HighLikesCard = withHighLikes(VideoCard);
   return (
     <div className="flex flex-wrap">
-      {videos.map((video) => (
-        <Link
-          className=" w-64 m-2 p-2 mr-2 shadow-lg rounded-lg"
-          to={"/watch?v=" + video.id}
-          key={video.id}
-        >
-          {video.statistics.likeCount > 20000 ? (
-            <HighLikesCard info={video} />
-          ) : (
-            <VideoCard info={video} />
-          )}
-        </Link>
-      ))}
+      {videos.map((video) => {
+        return (
+          <Link
+            className=" w-64 m-2 p-2 mr-2 shadow-lg rounded-lg"
+            to={"/watch?v=" + video.id}
+            key={video.id}
+          >
+            {video.statistics.likeCount > 20000 ? (
+              <HighLikesCard info={video} />
+            ) : (
+              <VideoCard info={video} />
+            )}
+          </Link>
+        );
+      })}
     </div>
   );
 };
