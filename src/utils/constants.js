@@ -21,10 +21,10 @@ export const SEARCH_RESULT_API =
   GOOGLE_API_KEY +
   "&q=";
 
-// export const COMMENT_API =
-//   "https://youtube.googleapis.com/youtube/v3/comments?part=snippet&key=" +
-//   GOOGLE_API_KEY +
-//   "&parentId=";
+export const COMMENT_API =
+  "https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&maxResults=100&key=" +
+  GOOGLE_API_KEY +
+  "&videoId=";
 
 export const LIVE_CHAT_COUNT = 20;
 

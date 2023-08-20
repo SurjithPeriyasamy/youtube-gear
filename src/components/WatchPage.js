@@ -69,7 +69,7 @@ const WatchPage = () => {
               </h2>
             </div>
           </div>
-          <CommentsContainer />
+          <CommentsContainer videoId={param} />
         </div>
         <div className="lg:basis-1/2 px-2 flex flex-col">
           <LiveChat />

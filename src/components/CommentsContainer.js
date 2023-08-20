@@ -1,113 +1,57 @@
 import React from "react";
-
-const commentsData = [
-  {
-    name: "Surjith P",
-    commentText: "Hai Hello Brother",
-    replies: [
-      {
-        name: "Surjith P",
-        commentText: "Hai Hello Brother",
-        replies: [
-          {
-            name: "Surjith P",
-            commentText: "Hai Hello Brother",
-            replies: [
-              {
-                name: "Surjith P",
-                commentText: "Hai Hello Brother",
-                replies: [
-                  {
-                    name: "Surjith P",
-                    commentText: "Hai Hello Brother",
-                    replies: [],
-                  },
-                ],
-              },
-              {
-                name: "Surjith P",
-                commentText: "Hai Hello Brother",
-                replies: [],
-              },
-              {
-                name: "Surjith P",
-                commentText: "Hai Hello Brother",
-                replies: [],
-              },
-            ],
-          },
-          {
-            name: "Surjith P",
-            commentText: "Hai Hello Brother",
-            replies: [],
-          },
-        ],
-      },
-      {
-        name: "Surjith P",
-        commentText: "Hai Hello Brother",
-        replies: [],
-      },
-    ],
-  },
-  {
-    name: "Surjith P",
-    commentText: "Hai Hello Brother",
-    replies: [],
-  },
-  {
-    name: "Surjith P",
-    commentText: "Hai Hello Brother",
-    replies: [],
-  },
-  {
-    name: "Surjith P",
-    commentText: "Hai Hello Brother",
-    replies: [],
-  },
-  {
-    name: "Surjith P",
-    commentText: "Hai Hello Brother",
-    replies: [],
-  },
-  {
-    name: "Surjith P",
-    commentText: "Hai Hello Brother",
-    replies: [],
-  },
-];
+import { useEffect, useState } from "react";
+import { COMMENT_API } from "../utils/constants";
 
 const Comment = ({ data }) => {
-  const { name, commentText, replies } = data;
+  const { textDisplay, authorDisplayName, authorProfileImageUrl } =
+    data?.snippet?.topLevelComment?.snippet || data?.snippet;
+
   return (
-    <div className="flex items-center gap-3 bg-gray-200 p-1 rounded-lg">
+    <div className="my-3 flex items-center gap-3 p-1 rounded-lg">
       <div>
         <img
-          className="h-7"
+          className=" rounded-full"
           alt="commentProfile"
-          src="https://cdn-icons-png.flaticon.com/512/552/552721.png"
+          src={authorProfileImageUrl}
         />
       </div>
       <div>
-        <p className="font-semibold text-sm"> {name}</p>
-        <p className="text-xs">{commentText}</p>
+        <p className="font-semibold text-sm">@{authorDisplayName}</p>
+        <p className="text-xs">{textDisplay}</p>
       </div>
     </div>
   );
 };
 
-const CommentsList = ({ comments }) => {
+const CommentsList = ({ comments, i }) => {
   return comments.map((comment, index) => (
-    <div key={index}>
+    <div key={comment.id}>
       <Comment data={comment} />
-      <div className="ml-10 my-2 pl-3 border border-l-gray-500 border-white">
-        <CommentsList comments={comment.replies} />
-      </div>
+      {comment.replies && (
+        <div className="ml-10 my-2 pl-3 border border-l-gray-500 border-white">
+          <div className="cursor-pointer font-medium text-blue-600">
+            Replies ({comment.replies.comments.length}) ⬇
+          </div>
+
+          <CommentsList i={index} comments={comment.replies.comments} />
+        </div>
+      )}
     </div>
   ));
 };
 
-const CommentsContainer = () => {
+const CommentsContainer = ({ videoId }) => {
+  const [commentsData, setCommentsData] = useState([]);
+
+  useEffect(() => {
+    getCommentsData();
+  }, [videoId]);
+
+  const getCommentsData = async () => {
+    const data = await fetch(COMMENT_API + videoId);
+    const json = await data.json();
+    setCommentsData(json.items);
+  };
   return (
     <div>
       <h1 className="font-bold m-1 text-lg">Comments:</h1>
