@@ -79,7 +79,7 @@ const Header = () => {
         </Link>
       </div>
       <div className="w-full relative col-span-4 pt-2 flex flex-col">
-        <form className="flex">
+        <form id="search" className="flex">
           <input
             placeholder="Search"
             className="w-full shadow-inner px-3 py-1 border border-gray-400 focus:outline-blue-300 rounded-l-full"
@@ -99,7 +99,7 @@ const Header = () => {
           </Link>
         </form>
         {search !== "" && suggestion && (
-          <div className="absolute top-12 w-[91%] left-0  bg-white py-2 shadow-lg rounded-lg border border-gray-200">
+          <div className="absolute top-12 w-[91%]  bg-white py-2 shadow-lg rounded-lg border border-gray-200">
             <ul>
               {searchSuggestion.map((s) => (
                 <li key={s} onClick={() => setShowSuggestion(false)}>
@@ -122,13 +122,13 @@ const Header = () => {
       </div>
       <div
         onClick={() => setShowSuggestion(false)}
-        className="relative flex justify-end mr-[15%] col-span-4 p-1 "
+        className="relative flex justify-end items-center col-span-4 p-1 "
       >
         <img
           onClick={() =>
             showLoginBox ? setShowLoginbox(false) : setShowLoginbox(true)
           }
-          className="center h-8 float-right rounded-full cursor-pointer"
+          className="h-8 rounded-full cursor-pointer"
           alt="User"
           src={login ? USER_PROFILE : DEFAULT_PROFILE}
         />
