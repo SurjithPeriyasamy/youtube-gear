@@ -1,29 +1,24 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { openMenu, toggleMenu } from "../utils/appSlice";
-import {
-  USER_PROFILE,
-  DEFAULT_PROFILE,
-  YOUTUBE_SEARCH_API,
-} from "../utils/constants";
+import { DEFAULT_PROFILE, YOUTUBE_SEARCH_API } from "../utils/constants";
 import { cacheResults } from "../utils/searchSlice";
 import { Link } from "react-router-dom";
 import UserContext from "../utils/UserContext";
+import { toggleUserForm } from "../utils/appSlice";
+import SignUpPage from "./SignUpPage";
+import SignInPage from "./SignInPage";
+import UserPage from "./UserPage";
 
 const Header = () => {
   const [search, setSearch] = useState("");
 
   const [searchSuggestion, setSearchSuggestion] = useState([]);
 
-  const [showLoginBox, setShowLoginbox] = useState(false);
-
-  const [logUserName, setlogUserName] = useState("");
-
-  const [error, setError] = useState(false);
-
   const dispatch = useDispatch();
 
   const searchCache = useSelector((store) => store.search.results);
+  const toggleForm = useSelector((store) => store.app.isUserFormOpen);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -37,6 +32,7 @@ const Header = () => {
     return () => clearTimeout(timer);
   }, [search]);
   const getSearchSuggestion = async () => {
+    console.log(searchCache);
     const data = await fetch(YOUTUBE_SEARCH_API + search);
     const json = await data.json();
     setSearchSuggestion(json[1]);
@@ -47,14 +43,8 @@ const Header = () => {
     );
   };
 
-  const {
-    suggestion,
-    setShowSuggestion,
-    loggedInUser,
-    setUserName,
-    login,
-    setLogin,
-  } = useContext(UserContext);
+  const { suggestion, setShowSuggestion, showUser, signUpForm, signInForm } =
+    useContext(UserContext);
 
   const toggleMenuHandler = () => dispatch(toggleMenu());
 
@@ -125,62 +115,16 @@ const Header = () => {
         className="relative flex justify-end items-center col-span-4 p-1 "
       >
         <img
-          onClick={() =>
-            showLoginBox ? setShowLoginbox(false) : setShowLoginbox(true)
-          }
+          onClick={() => dispatch(toggleUserForm())}
           className="h-8 rounded-full cursor-pointer"
           alt="User"
-          src={login ? USER_PROFILE : DEFAULT_PROFILE}
+          src={DEFAULT_PROFILE}
         />
-        {showLoginBox && (
-          <div className=" bg-gray-200 xl:top-0 top-full lg:right-[12%] w-60 h-40 absolute rounded-lg shadow-2xl p-2">
-            {login ? (
-              <div className="flex flex-col gap-y-3">
-                <div className="p-2 flex gap-3 items-center">
-                  <img className="h-10" alt="user" src={USER_PROFILE} />
-                  <div>
-                    <h2 className="font-semibold">{loggedInUser}</h2>
-                    <h3>{loggedInUser}@Enjoy🚀</h3>
-                  </div>
-                </div>
-                <button
-                  onClick={() => {
-                    setUserName("");
-                    setLogin(false);
-                    setlogUserName("");
-                    setShowLoginbox(false);
-                  }}
-                  className="bg-green-300 hover:bg-blue-200 w-full p-1 rounded-lg font-medium"
-                >
-                  Logout
-                </button>
-              </div>
-            ) : (
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setUserName(logUserName);
-                  logUserName && setLogin(true);
-                  !logUserName ? setError(true) : setError(false);
-                }}
-                id="user"
-              >
-                <label className="font-semibold">User Name</label>
-                <input
-                  placeholder="Type Your Name..."
-                  className="text-red-600  border-b-2 border-blue-400 mx-1  bg-transparent focus:outline-none "
-                  value={logUserName}
-                  onChange={(e) => setlogUserName(e.target.value)}
-                  type="text"
-                />
-                {error && (
-                  <div className="text-xs text-red-600">Enter Valid Name</div>
-                )}
-                <button className=" mt-5 hover:bg-blue-300 bg-slate-300 block w-full  py-1 my-2 rounded-lg">
-                  Login
-                </button>
-              </form>
-            )}
+        {toggleForm && (
+          <div className=" bg-gray-100 xl:top-3 top-12 lg:right-[12%] w-60 h-fit absolute rounded-lg shadow-2xl p-2">
+            {signUpForm && <SignUpPage />}
+            {signInForm && <SignInPage />}
+            {showUser && <UserPage />}
           </div>
         )}
       </div>

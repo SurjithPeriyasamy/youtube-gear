@@ -10,7 +10,7 @@ const ChatMessage = ({ name, text }) => {
         <img
           className="h-6"
           alt="commentProfile"
-          src={name === loggedInUser ? USER_PROFILE : DEFAULT_PROFILE}
+          src={name === loggedInUser.name ? USER_PROFILE : DEFAULT_PROFILE}
         />
       </div>
       <div>

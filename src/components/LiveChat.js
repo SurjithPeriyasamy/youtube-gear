@@ -5,12 +5,13 @@ import { addMessage } from "../utils/chatSlice";
 import { generateRandomMessage, generateRandomName } from "../utils/helper";
 import UserContext from "../utils/UserContext";
 import { USER_PROFILE, DEFAULT_PROFILE } from "../utils/constants";
+
 const LiveChat = () => {
   const [sendMessage, setSendMessage] = useState("");
 
   const [error, setError] = useState(false);
 
-  const { loggedInUser, login } = useContext(UserContext);
+  const { loggedInUser, showUser } = useContext(UserContext);
 
   const dispatch = useDispatch();
 
@@ -41,10 +42,10 @@ const LiveChat = () => {
           <img
             className="rounded-full h-8"
             alt="profile"
-            src={loggedInUser !== "" ? USER_PROFILE : DEFAULT_PROFILE}
+            src={loggedInUser.name ? USER_PROFILE : DEFAULT_PROFILE}
           />
           <div className="font-semibold text-gray-500">
-            {!login ? "Please Log In buddy 🤷‍♂️" : loggedInUser}
+            {!showUser ? "Please Log In buddy 🤷‍♂️" : loggedInUser.name}
           </div>
         </div>
         <form
@@ -52,10 +53,10 @@ const LiveChat = () => {
           onSubmit={(e) => {
             e.preventDefault();
             sendMessage !== "" &&
-              login &&
+              showUser &&
               dispatch(
                 addMessage({
-                  name: loggedInUser,
+                  name: loggedInUser.name,
                   message: sendMessage,
                 })
               );
@@ -68,9 +69,9 @@ const LiveChat = () => {
             className=" w-4/5 bg-transparent placeholder:text-sm placeholder:font-semibold border border-x-0 border-t-0  border-b-gray-400 outline-0 focus:border-b-blue-600 duration-700"
             type="text"
             placeholder="Say something..."
-            value={login ? sendMessage : ""}
+            value={showUser ? sendMessage : ""}
             onChange={(e) =>
-              login ? setSendMessage(e.target.value) : setSendMessage("")
+              showUser ? setSendMessage(e.target.value) : setSendMessage("")
             }
           />
           {error && (

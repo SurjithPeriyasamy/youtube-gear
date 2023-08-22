@@ -9,9 +9,11 @@ import UserContext from "./utils/UserContext";
 function App() {
   const [showSuggestion, setShowSuggestion] = useState();
 
-  const [userName, setUserName] = useState("");
+  const [loggedInUser, setLoggedInUser] = useState(null);
 
-  const [login, setLogin] = useState(false);
+  const [signIn, setSignInForm] = useState(false);
+  const [SignUp, setSignUpForm] = useState(true);
+  const [user, setShowUser] = useState(false);
 
   return (
     <Provider store={store}>
@@ -19,10 +21,14 @@ function App() {
         value={{
           suggestion: showSuggestion,
           setShowSuggestion,
-          loggedInUser: userName,
-          setUserName,
-          login: login,
-          setLogin,
+          loggedInUser: loggedInUser,
+          setLoggedInUser,
+          signInForm: signIn,
+          setSignInForm,
+          signUpForm: SignUp,
+          setSignUpForm,
+          showUser: user,
+          setShowUser,
         }}
       >
         <div className="App box-border ">
