@@ -2,10 +2,14 @@ import React from "react";
 import { USER_PROFILE } from "../utils/constants";
 import UserContext from "../utils/UserContext";
 import { useContext } from "react";
+import { useDispatch } from "react-redux";
+import { closeUserForm } from "../utils/appSlice";
 
 const UserPage = () => {
-  const { setShowUser, loggedInUser, setLoggedInUser, setSignInForm } =
+  const { loggedInUser, setLoggedInUser, setSignInForm, setShowLogin } =
     useContext(UserContext);
+
+  const dispatch = useDispatch();
   //console.log(loggedInUser);
   return (
     <div>
@@ -18,18 +22,18 @@ const UserPage = () => {
           <div>
             <h1 className="font-semibold">{loggedInUser.email}</h1>
             <h2>{loggedInUser.name}</h2>
-            <h3 className="font-medium">{loggedInUser.name}@Enjoy🚀</h3>
           </div>
         </div>
         <button
           onClick={() => {
-            setShowUser(false);
             setSignInForm(true);
+            setShowLogin(false);
             setLoggedInUser(null);
+            dispatch(closeUserForm());
           }}
           className="bg-green-300 hover:bg-blue-200 w-full p-1 rounded-lg font-medium"
         >
-          Logout
+          Sign out
         </button>
       </div>
     </div>

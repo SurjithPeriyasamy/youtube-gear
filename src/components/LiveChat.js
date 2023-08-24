@@ -4,14 +4,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { addMessage } from "../utils/chatSlice";
 import { generateRandomMessage, generateRandomName } from "../utils/helper";
 import UserContext from "../utils/UserContext";
-import { USER_PROFILE, DEFAULT_PROFILE } from "../utils/constants";
 
-const LiveChat = () => {
+const LiveChat = ({ loggedUserName, loggedUserProfile }) => {
   const [sendMessage, setSendMessage] = useState("");
 
   const [error, setError] = useState(false);
 
-  const { loggedInUser, showUser } = useContext(UserContext);
+  const [loginError, setLoginError] = useState(false);
+
+  const { loggedInUser } = useContext(UserContext);
 
   const dispatch = useDispatch();
 
@@ -34,7 +35,12 @@ const LiveChat = () => {
     <div className=" mb-4 bg-gray-100 flex flex-col items-center shadow-lg rounded-lg">
       <div className="w-full shadow-lg rounded-lg  overflow-y-scroll h-[500px]  flex flex-col-reverse">
         {ChatMessages.map((cm, i) => (
-          <ChatMessage key={i} name={cm.name} text={cm.message} />
+          <ChatMessage
+            key={i}
+            name={cm.name}
+            text={cm.message}
+            profile={loggedUserProfile}
+          />
         ))}
       </div>
       <div className="my-1 w-full py-2 px-4">
@@ -42,37 +48,37 @@ const LiveChat = () => {
           <img
             className="rounded-full h-8"
             alt="profile"
-            src={loggedInUser.name ? USER_PROFILE : DEFAULT_PROFILE}
+            src={loggedUserProfile}
           />
-          <div className="font-semibold text-gray-500">
-            {!showUser ? "Please Log In buddy 🤷‍♂️" : loggedInUser.name}
-          </div>
+          <div className="font-semibold text-gray-500">{loggedUserName}</div>
         </div>
+        {loginError && (
+          <div className="text-red-600 text-xs">Please Sign In</div>
+        )}
         <form
+          id="livechat"
           className=" flex flex-col items-center"
           onSubmit={(e) => {
             e.preventDefault();
-            sendMessage !== "" &&
-              showUser &&
-              dispatch(
-                addMessage({
-                  name: loggedInUser.name,
-                  message: sendMessage,
-                })
-              );
-
+            loggedInUser
+              ? sendMessage !== ""
+                ? dispatch(
+                    addMessage({
+                      name: loggedUserName,
+                      message: sendMessage,
+                    })
+                  )
+                : setError(true) && setLoginError(false)
+              : setLoginError(true) && setError(false);
             setSendMessage("");
-            sendMessage === "" ? setError(true) : setError(false);
           }}
         >
           <input
             className=" w-4/5 bg-transparent placeholder:text-sm placeholder:font-semibold border border-x-0 border-t-0  border-b-gray-400 outline-0 focus:border-b-blue-600 duration-700"
             type="text"
             placeholder="Say something..."
-            value={showUser ? sendMessage : ""}
-            onChange={(e) =>
-              showUser ? setSendMessage(e.target.value) : setSendMessage("")
-            }
+            value={loggedInUser ? sendMessage : ""}
+            onChange={(e) => setSendMessage(e.target.value)}
           />
           {error && (
             <div className="text-red-600 text-xs">Enter valid Message</div>

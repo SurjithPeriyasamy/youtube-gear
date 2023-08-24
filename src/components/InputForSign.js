@@ -8,11 +8,11 @@ const InputForSign = ({
   typeName,
 }) => {
   return (
-    <div>
+    <div className="flex flex-col mt-3">
       <label className="font-medium text-sm">{labelName}</label>
       <input
         placeholder={placeholderName}
-        className="placeholder:text-sm w-[94%] border-b-2 border-blue-300 mx-1  bg-transparent focus:outline-none "
+        className="text-gray-700 placeholder:text-sm border-b border-gray-500  bg-transparent focus:outline-none "
         value={value}
         onChange={(e) => setValue(e.target.value)}
         type={typeName}

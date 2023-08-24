@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { closeMenu } from "../utils/appSlice";
 import { Link, useSearchParams } from "react-router-dom";
@@ -6,8 +6,12 @@ import SuggestVideos from "./SuggestVideos";
 import { useVideosApi } from "../utils/useVideosApi";
 import CommentsContainer from "./CommentsContainer";
 import LiveChat from "./LiveChat";
-import { WATCH_VIDEO_API } from "../utils/constants";
-import Body from "./Body";
+import {
+  DEFAULT_PROFILE,
+  USER_PROFILE,
+  WATCH_VIDEO_API,
+} from "../utils/constants";
+import UserContext from "../utils/UserContext";
 
 const WatchPage = () => {
   const [searchParams] = useSearchParams();
@@ -15,6 +19,8 @@ const WatchPage = () => {
   const param = searchParams.get("v");
 
   const [watchVideo, setWatchVideo] = useState(null);
+
+  const { loggedInUser } = useContext(UserContext);
 
   const dispatch = useDispatch();
 
@@ -72,7 +78,12 @@ const WatchPage = () => {
           <CommentsContainer videoId={param} />
         </div>
         <div className="lg:basis-1/2 px-2 flex flex-col">
-          <LiveChat />
+          <LiveChat
+            loggedUserName={
+              loggedInUser ? loggedInUser.name : "Please Login Buddy"
+            }
+            loggedUserProfile={loggedInUser ? USER_PROFILE : DEFAULT_PROFILE}
+          />
           <div className="flex flex-col border border-gray-200 shadow-lg">
             {suggestionVideos.map((video) => (
               <Link

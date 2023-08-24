@@ -1,13 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { openMenu, toggleMenu } from "../utils/appSlice";
-import { DEFAULT_PROFILE, YOUTUBE_SEARCH_API } from "../utils/constants";
+import { closeUserForm, openMenu, toggleMenu } from "../utils/appSlice";
+import {
+  DEFAULT_PROFILE,
+  USER_PROFILE,
+  YOUTUBE_SEARCH_API,
+} from "../utils/constants";
 import { cacheResults } from "../utils/searchSlice";
 import { Link } from "react-router-dom";
 import UserContext from "../utils/UserContext";
 import { toggleUserForm } from "../utils/appSlice";
-import SignUpPage from "./SignUpPage";
-import SignInPage from "./SignInPage";
 import UserPage from "./UserPage";
 
 const Header = () => {
@@ -32,7 +34,6 @@ const Header = () => {
     return () => clearTimeout(timer);
   }, [search]);
   const getSearchSuggestion = async () => {
-    console.log(searchCache);
     const data = await fetch(YOUTUBE_SEARCH_API + search);
     const json = await data.json();
     setSearchSuggestion(json[1]);
@@ -43,7 +44,7 @@ const Header = () => {
     );
   };
 
-  const { suggestion, setShowSuggestion, showUser, signUpForm, signInForm } =
+  const { suggestion, loggedInUser, setShowSuggestion, setShowLogin } =
     useContext(UserContext);
 
   const toggleMenuHandler = () => dispatch(toggleMenu());
@@ -51,7 +52,10 @@ const Header = () => {
   return (
     <div className="grid grid-flow-col fixed top-0 right-0 left-0 bg-white p-3 mx-1 z-10 shadow-lg">
       <div
-        onClick={() => setShowSuggestion(false)}
+        onClick={() => {
+          setShowSuggestion(false);
+          dispatch(closeUserForm());
+        }}
         className="flex items-center col-span-4 "
       >
         <img
@@ -60,7 +64,13 @@ const Header = () => {
           src="https://cdn-icons-png.flaticon.com/512/6015/6015685.png"
           onClick={toggleMenuHandler}
         />
-        <Link onClick={() => dispatch(openMenu())} to="/">
+        <Link
+          onClick={() => {
+            dispatch(openMenu());
+            setSearch("");
+          }}
+          to="/"
+        >
           <img
             className="h-12 mx-3"
             alt="logo"
@@ -68,8 +78,18 @@ const Header = () => {
           />
         </Link>
       </div>
-      <div className="w-full relative col-span-4 pt-2 flex flex-col">
-        <form id="search" className="flex">
+      <div
+        onClick={() => dispatch(closeUserForm())}
+        className="w-full relative col-span-4 pt-2 flex flex-col"
+      >
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            setShowSuggestion(false);
+          }}
+          id="search"
+          className="flex"
+        >
           <input
             placeholder="Search"
             className="w-full shadow-inner px-3 py-1 border border-gray-400 focus:outline-blue-300 rounded-l-full"
@@ -114,17 +134,30 @@ const Header = () => {
         onClick={() => setShowSuggestion(false)}
         className="relative flex justify-end items-center col-span-4 p-1 "
       >
-        <img
-          onClick={() => dispatch(toggleUserForm())}
-          className="h-8 rounded-full cursor-pointer"
-          alt="User"
-          src={DEFAULT_PROFILE}
-        />
+        {loggedInUser ? (
+          <img
+            onClick={() => dispatch(toggleUserForm())}
+            className="h-8 rounded-full cursor-pointer"
+            alt="User"
+            src={USER_PROFILE}
+          />
+        ) : (
+          <div
+            className="flex font-semibold text-blue-500 cursor-pointer border items-center border-blue-600 rounded-full p-1"
+            onClick={() => setShowLogin(true)}
+          >
+            <img
+              className="h-6 rounded-full cursor-pointer"
+              alt="User"
+              src={DEFAULT_PROFILE}
+            />
+            <span>Sign In</span>
+          </div>
+        )}
+
         {toggleForm && (
-          <div className=" bg-gray-100 xl:top-3 top-12 lg:right-[12%] w-60 h-fit absolute rounded-lg shadow-2xl p-2">
-            {signUpForm && <SignUpPage />}
-            {signInForm && <SignInPage />}
-            {showUser && <UserPage />}
+          <div className="bg-gray-100 xl:top-3 top-12 lg:right-[12%] w-60 h-fit absolute rounded-lg shadow-2xl p-2">
+            <UserPage />
           </div>
         )}
       </div>

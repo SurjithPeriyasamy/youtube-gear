@@ -1,6 +1,5 @@
 import { Provider } from "react-redux";
 import "./App.css";
-import Header from "./components/Header";
 import store from "./utils/store";
 import { Outlet } from "react-router-dom";
 import { useState } from "react";
@@ -13,7 +12,7 @@ function App() {
 
   const [signIn, setSignInForm] = useState(false);
   const [SignUp, setSignUpForm] = useState(true);
-  const [user, setShowUser] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
 
   return (
     <Provider store={store}>
@@ -27,15 +26,12 @@ function App() {
           setSignInForm,
           signUpForm: SignUp,
           setSignUpForm,
-          showUser: user,
-          setShowUser,
+          showLogin: showLogin,
+          setShowLogin,
         }}
       >
-        <div className="App box-border ">
-          <Header />
-          <div className="mt-20">
-            <Outlet />
-          </div>
+        <div className="App box-border">
+          <Outlet />
         </div>
       </UserContext.Provider>
     </Provider>

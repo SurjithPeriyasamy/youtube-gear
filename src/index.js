@@ -4,14 +4,14 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Body from "./components/Body";
 import WatchPage from "./components/WatchPage";
 import MainContainer from "./components/MainContainer";
-// import SearchResults from "./components/SearchResults";
 import { lazy } from "react";
 import { Suspense } from "react";
 
 const SearchResults = lazy(() => import("./components/SearchResults"));
+
+const Body = lazy(() => import("./components/Body"));
 
 const appRouter = createBrowserRouter([
   {

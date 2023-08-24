@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { addUser } from "../utils/userSlice";
 import UserContext from "../utils/UserContext";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import InputForSign from "./InputForSign";
 
 const SignUpPage = () => {
@@ -17,32 +17,65 @@ const SignUpPage = () => {
 
   const [errorPassword, setErrorPassword] = useState(false);
 
-  const [error, setError] = useState(false);
+  const [emptyError, setEmptyError] = useState(false);
+
+  const [existError, setExistError] = useState(false);
   const dispatch = useDispatch();
+
+  const oldUsers = useSelector((store) => store.user.users);
+  //console.log(oldUsers);
 
   const { setSignUpForm, setSignInForm } = useContext(UserContext);
 
   return (
-    <div className="">
+    <div className="flex flex-col ">
       <form
+        id="signup"
         onSubmit={(e) => {
           e.preventDefault();
-          userName && userEmail && userPassword
-            ? dispatch(
-                addUser({
-                  name: userName,
-                  email: userEmail,
-                  password: userPassword,
-                })
-              )
-            : setError(true);
-          userPassword !== confirmPassword && setErrorPassword(true);
-          setSignInForm(true);
-          setSignUpForm(false);
+          const oldUser = oldUsers.find((u) => u.email === userEmail);
+          if (
+            userName !== "" &&
+            userEmail !== "" &&
+            userPassword !== "" &&
+            confirmPassword !== ""
+          ) {
+            if (userPassword === confirmPassword) {
+              if (oldUser) {
+                if (oldUser.email !== userEmail) {
+                  dispatch(
+                    addUser({
+                      name: userName,
+                      email: userEmail,
+                      password: userPassword,
+                    })
+                  );
+                  setSignInForm(true);
+                  setSignUpForm(false);
+                } else {
+                  setExistError(true);
+                }
+              } else {
+                dispatch(
+                  addUser({
+                    name: userName,
+                    email: userEmail,
+                    password: userPassword,
+                  })
+                );
+                setSignInForm(true);
+                setSignUpForm(false);
+              }
+            } else {
+              setEmptyError(false);
+              setErrorPassword(true);
+            }
+          } else {
+            setEmptyError(true);
+          }
         }}
-        id="user"
       >
-        <h1 className="text-center font-bold text-red-500 [text-shadow:_0_5px_2px_gray]">
+        <h1 className="text-center text-lg font-bold text-red-500 [text-shadow:_0_5px_2px_gray]">
           Welcome to <span className="text-blue-500">Sign Up</span>
         </h1>
         <InputForSign
@@ -59,23 +92,30 @@ const SignUpPage = () => {
           value={userEmail}
           setValue={setUserEmail}
         />
-        <label className="font-medium text-sm">Password</label>
-        <div className="border-b-2 border-blue-300 flex w-[95%]">
-          <input
-            placeholder="Enter password"
-            className="placeholder:text-sm mx-1 bg-transparent focus:outline-none "
-            value={userPassword}
-            onChange={(e) => setUserPassword(e.target.value)}
-            type={showPassword ? "text" : "password"}
-          />
-          <span
-            className="cursor-pointer text-lg"
-            onClick={() =>
-              showPassword ? setShowPassword(false) : setShowPassword(true)
-            }
-          >
-            👁️‍🗨️
-          </span>
+        {existError && (
+          <div className="text-xs text-red-600">
+            Your account already registered
+          </div>
+        )}
+        <div>
+          <label className="font-medium text-sm">Password</label>
+          <div className="border-b border-gray-500 flex justify-between ">
+            <input
+              placeholder="Enter password"
+              className="text-gray-700 placeholder:text-sm bg-transparent focus:outline-none "
+              value={userPassword}
+              onChange={(e) => setUserPassword(e.target.value)}
+              type={showPassword ? "text" : "password"}
+            />
+            <span
+              className="cursor-pointer text-lg"
+              onClick={() =>
+                showPassword ? setShowPassword(false) : setShowPassword(true)
+              }
+            >
+              👁️‍🗨️
+            </span>
+          </div>
         </div>
         <InputForSign
           labelName={"Confirm password"}
@@ -91,7 +131,7 @@ const SignUpPage = () => {
         <button className="font-semibold mt-5 hover:bg-blue-300 bg-slate-300 block w-full  py-1 my-2 rounded-lg">
           Sign Up
         </button>
-        {error && (
+        {emptyError && (
           <div className="text-xs text-red-600">
             Please Fill all input fields
           </div>
@@ -104,7 +144,7 @@ const SignUpPage = () => {
             setSignUpForm(false);
             setSignInForm(true);
           }}
-          className="text-blue-400 text-base cursor-pointer mx-1"
+          className="text-blue-500 text-base cursor-pointer mx-1"
         >
           Sign In
         </span>

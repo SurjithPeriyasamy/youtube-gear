@@ -5,7 +5,7 @@ const UserContext = createContext({
   loggedInUser: null,
   signUpForm: true,
   signInForm: false,
-  showUser: false,
+  showLogin: false,
 });
 
 export default UserContext;

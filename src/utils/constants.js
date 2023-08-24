@@ -29,7 +29,7 @@ export const COMMENT_API =
 export const LIVE_CHAT_COUNT = 20;
 
 export const USER_PROFILE =
-  "https://img.freepik.com/free-icon/user_318-875902.jpg?t=st=1692357062~exp=1692357662~hmac=8cf8277d08b94b679424ab518da76bc8a9b58f40186fbebb1147fee2ae8436d9";
+  "https://cdn-icons-png.flaticon.com/128/9686/9686199.png";
 
 export const DEFAULT_PROFILE =
   "https://img.freepik.com/free-icon/user_318-504048.jpg?t=st=1692424418~exp=1692425018~hmac=bede93fb24b4fc5cd4b9abe4a6146b8b037c3be765c706bba5586b36f8813427";

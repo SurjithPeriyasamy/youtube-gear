@@ -19,9 +19,17 @@ const appSlice = createSlice({
     toggleUserForm: (state) => {
       state.isUserFormOpen = !state.isUserFormOpen;
     },
+    closeUserForm: (state) => {
+      state.isUserFormOpen = false;
+    },
   },
 });
 
-export const { toggleMenu, closeMenu, openMenu, toggleUserForm } =
-  appSlice.actions;
+export const {
+  toggleMenu,
+  closeMenu,
+  openMenu,
+  toggleUserForm,
+  closeUserForm,
+} = appSlice.actions;
 export default appSlice.reducer;
