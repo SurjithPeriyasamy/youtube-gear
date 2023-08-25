@@ -21,7 +21,7 @@ const SearchResults = () => {
   };
 
   return (
-    <div className="w-full flex flex-col">
+    <div className="flex flex-col m-auto">
       {videos.map((video) => (
         <Link
           className="m-2 p-2 mr-2 shadow-lg rounded-lg"

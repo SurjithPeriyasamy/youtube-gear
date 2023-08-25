@@ -1,7 +1,6 @@
 import React from "react";
 
 const VideoCard = ({ info }) => {
-  //console.log(info);
   const { snippet, statistics } = info;
   const { channelTitle, thumbnails, title } = snippet;
   return (
@@ -11,10 +10,21 @@ const VideoCard = ({ info }) => {
         className="w-full rounded-lg "
         src={thumbnails.medium.url}
       />
-      <ul className="flex flex-col justify-between">
+      <ul>
         <li className="font-bold py-2">{title}</li>
-        <li className="text-gray-800 text-sm  ">{channelTitle}</li>
-        <li className="text-gray-800 text-sm ">{statistics.viewCount} Views</li>
+        <li className="text-gray-800 text-sm font-medium flex items-center gap-1">
+          <img
+            alt="thumbnail"
+            className="h-6 w-6 rounded-full"
+            src={thumbnails.medium.url}
+          />
+          <div>
+            {channelTitle}
+            <div className=" text-gray-600 text-xs font-medium">
+              {statistics.viewCount / 1000}K Views
+            </div>
+          </div>
+        </li>
       </ul>
     </div>
   );

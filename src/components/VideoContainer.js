@@ -1,17 +1,20 @@
 import VideoCard, { withHighLikes } from "./VideoCard";
 import { Link } from "react-router-dom";
 import { useVideosApi } from "../utils/useVideosApi";
+import ShimmerUi from "./ShimmerUi";
 
 const VideoContainer = () => {
   const videos = useVideosApi();
 
   const HighLikesCard = withHighLikes(VideoCard);
-  return (
-    <div className="flex flex-wrap">
+  return videos.length === 0 ? (
+    <ShimmerUi />
+  ) : (
+    <div className="flex justify-center lg:justify-stretch flex-wrap">
       {videos.map((video) => {
         return (
           <Link
-            className=" w-64 m-2 p-2 mr-2 shadow-lg rounded-lg"
+            className=" hover:shadow-[0_0_5px_0_gray] w-64 m-2 p-2 mr-2 shadow-lg rounded-lg"
             to={"/watch?v=" + video.id}
             key={video.id}
           >

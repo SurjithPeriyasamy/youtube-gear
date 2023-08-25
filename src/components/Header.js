@@ -69,10 +69,11 @@ const Header = () => {
             dispatch(openMenu());
             setSearch("");
           }}
+          className="mx-2"
           to="/"
         >
           <img
-            className="h-12 mx-3"
+            className="h-12 w-full "
             alt="logo"
             src="https://lh3.googleusercontent.com/3zkP2SYe7yYoKKe47bsNe44yTgb4Ukh__rBbwXwgkjNRe4PykGG409ozBxzxkrubV7zHKjfxq6y9ShogWtMBMPyB3jiNps91LoNH8A=s500"
           />
@@ -80,7 +81,7 @@ const Header = () => {
       </div>
       <div
         onClick={() => dispatch(closeUserForm())}
-        className="w-full relative col-span-4 pt-2 flex flex-col"
+        className="w-full relative col-span-4 flex justify-center flex-col"
       >
         <form
           onSubmit={(e) => {
@@ -132,7 +133,7 @@ const Header = () => {
       </div>
       <div
         onClick={() => setShowSuggestion(false)}
-        className="relative flex justify-end items-center col-span-4 p-1 "
+        className="flex justify-end items-center col-span-4 p-1 "
       >
         {loggedInUser ? (
           <img
@@ -155,11 +156,7 @@ const Header = () => {
           </div>
         )}
 
-        {toggleForm && (
-          <div className="bg-gray-100 xl:top-3 top-12 lg:right-[12%] w-60 h-fit absolute rounded-lg shadow-2xl p-2">
-            <UserPage />
-          </div>
-        )}
+        {toggleForm && <UserPage />}
       </div>
     </div>
   );

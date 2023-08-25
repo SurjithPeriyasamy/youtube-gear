@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import UserContext from "../utils/UserContext";
 import { useContext } from "react";
 import { closeUserForm } from "../utils/appSlice";
+import LoginError from "./LoginError";
 
 const SignInPage = () => {
   const [userPassword, setUserPassword] = useState("");
@@ -65,9 +66,7 @@ const SignInPage = () => {
           value={userEmail}
           setValue={setUserEmail}
         />
-        {existError && (
-          <div className="text-xs text-red-600">No user Found ⏬</div>
-        )}
+        {existError && <LoginError errorMessage={"No user Found ⏬"} />}
         <div className="my-5 ">
           <label className="font-medium text-sm block">Password</label>
           <div className="border-b border-gray-500  flex justify-between">
@@ -89,14 +88,8 @@ const SignInPage = () => {
           </div>
         </div>
 
-        {misMatchError && (
-          <div className="text-xs text-red-600">Enter Valid Password</div>
-        )}
-        {error && (
-          <div className="text-xs text-red-600">
-            Please Fill all input fields
-          </div>
-        )}
+        {misMatchError && <LoginError errorMessage={"Enter valid password"} />}
+        {error && <LoginError errorMessage={"Please Fill all input fields"} />}
 
         <button className="font-semibold mt-10 hover:bg-blue-300 bg-slate-300 block w-full  py-1 my-2 rounded-lg">
           Sign In

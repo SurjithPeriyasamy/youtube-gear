@@ -12,7 +12,6 @@ const Filterbuttons = () => {
   const getCategories = async () => {
     const data = await fetch(CATEGORIES_API);
     const json = await data.json();
-    //console.log(json);
     setCategories(json.items);
   };
   return (

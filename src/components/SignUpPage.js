@@ -3,6 +3,7 @@ import { addUser } from "../utils/userSlice";
 import UserContext from "../utils/UserContext";
 import { useDispatch, useSelector } from "react-redux";
 import InputForSign from "./InputForSign";
+import LoginError from "./LoginError";
 
 const SignUpPage = () => {
   const [userName, setUserName] = useState("");
@@ -71,6 +72,7 @@ const SignUpPage = () => {
               setErrorPassword(true);
             }
           } else {
+            setErrorPassword(false);
             setEmptyError(true);
           }
         }}
@@ -93,9 +95,7 @@ const SignUpPage = () => {
           setValue={setUserEmail}
         />
         {existError && (
-          <div className="text-xs text-red-600">
-            Your account already registered
-          </div>
+          <LoginError errorMessage={"Your account already registered"} />
         )}
         <div>
           <label className="font-medium text-sm">Password</label>
@@ -125,16 +125,14 @@ const SignUpPage = () => {
           setValue={setConfirmPassword}
         />
         {errorPassword && (
-          <div className="text-xs text-red-600">Password doesn't match</div>
+          <LoginError errorMessage={"Password doesn't match"} />
         )}
 
         <button className="font-semibold mt-5 hover:bg-blue-300 bg-slate-300 block w-full  py-1 my-2 rounded-lg">
           Sign Up
         </button>
         {emptyError && (
-          <div className="text-xs text-red-600">
-            Please Fill all input fields
-          </div>
+          <LoginError errorMessage={" Please Fill all input fields"} />
         )}
       </form>
       <div className="font-semibold text-sm">
