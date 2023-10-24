@@ -1,18 +1,20 @@
 import { Provider } from "react-redux";
 import "./App.css";
 import store from "./utils/store";
-import { Outlet } from "react-router-dom";
+import Login from "./components/Login";
+import Body from "./components/Body";
 import { useState } from "react";
 import UserContext from "./utils/UserContext";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import WatchPage from "./components/WatchPage";
+import MainContainer from "./components/MainContainer";
+import { lazy } from "react";
+import { Suspense } from "react";
 
 function App() {
   const [showSuggestion, setShowSuggestion] = useState();
 
-  const [loggedInUser, setLoggedInUser] = useState(null);
-
-  const [signIn, setSignInForm] = useState(false);
   const [SignUp, setSignUpForm] = useState(true);
-  const [showLogin, setShowLogin] = useState(false);
 
   return (
     <Provider store={store}>
@@ -20,22 +22,44 @@ function App() {
         value={{
           suggestion: showSuggestion,
           setShowSuggestion,
-          loggedInUser: loggedInUser,
-          setLoggedInUser,
-          signInForm: signIn,
-          setSignInForm,
           signUpForm: SignUp,
           setSignUpForm,
-          showLogin: showLogin,
-          setShowLogin,
         }}
       >
         <div className="App box-border">
-          <Outlet />
+          <RouterProvider router={appRouter} />
         </div>
       </UserContext.Provider>
     </Provider>
   );
 }
-
+const SearchResults = lazy(() => import("./components/SearchResults"));
+export const appRouter = createBrowserRouter([
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/",
+    element: <Body />,
+    children: [
+      {
+        path: "/",
+        element: <MainContainer />,
+      },
+      {
+        path: "/watch",
+        element: <WatchPage />,
+      },
+      {
+        path: "/results",
+        element: (
+          <Suspense>
+            <SearchResults />
+          </Suspense>
+        ),
+      },
+    ],
+  },
+]);
 export default App;

@@ -17,7 +17,7 @@ const Comment = ({ data }) => {
       </div>
       <div>
         <p className="font-semibold text-sm">@{authorDisplayName}</p>
-        <p className="text-xs">{textDisplay}</p>
+        <p className="text-xs font-medium ml-5">{textDisplay}</p>
       </div>
     </div>
   );
@@ -28,11 +28,10 @@ const CommentsList = ({ comments, i }) => {
     <div key={comment.id}>
       <Comment data={comment} />
       {comment.replies && (
-        <div className="ml-10 my-2 pl-3 border border-l-gray-500 border-white">
+        <div className="ml-10 my-2 pl-3 border-l border-l-gray-500 ">
           <div className="cursor-pointer font-medium text-blue-600">
             Replies ({comment.replies.comments.length}) ⬇
           </div>
-
           <CommentsList i={index} comments={comment.replies.comments} />
         </div>
       )}

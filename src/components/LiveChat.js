@@ -1,18 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ChatMessage from "./ChatMessage";
 import { useDispatch, useSelector } from "react-redux";
 import { addMessage } from "../utils/chatSlice";
 import { generateRandomMessage, generateRandomName } from "../utils/helper";
-import UserContext from "../utils/UserContext";
+import { DEFAULT_PROFILE } from "../utils/constants";
 
-const LiveChat = ({ loggedUserName, loggedUserProfile }) => {
+const LiveChat = ({ user }) => {
   const [sendMessage, setSendMessage] = useState("");
 
   const [error, setError] = useState(false);
 
   const [loginError, setLoginError] = useState(false);
-
-  const { loggedInUser } = useContext(UserContext);
 
   const dispatch = useDispatch();
 
@@ -27,7 +25,7 @@ const LiveChat = ({ loggedUserName, loggedUserProfile }) => {
           message: generateRandomMessage(23) + " 🏋️‍♂️",
         })
       );
-    }, 500);
+    }, 1000);
 
     return () => clearInterval(interval);
   }, []);
@@ -35,12 +33,7 @@ const LiveChat = ({ loggedUserName, loggedUserProfile }) => {
     <div className=" mb-4 bg-gray-100 flex flex-col items-center shadow-lg rounded-lg">
       <div className="w-full shadow-lg rounded-lg  overflow-y-scroll h-[500px]  flex flex-col-reverse">
         {ChatMessages.map((cm, i) => (
-          <ChatMessage
-            key={i}
-            name={cm.name}
-            text={cm.message}
-            profile={loggedUserProfile}
-          />
+          <ChatMessage key={i} name={cm.name} user={user} text={cm.message} />
         ))}
       </div>
       <div className="my-1 w-full py-2 px-4">
@@ -48,9 +41,11 @@ const LiveChat = ({ loggedUserName, loggedUserProfile }) => {
           <img
             className="rounded-full h-8"
             alt="profile"
-            src={loggedUserProfile}
+            src={user ? user.profile : DEFAULT_PROFILE}
           />
-          <div className="font-semibold text-gray-500">{loggedUserName}</div>
+          <div className="font-semibold text-gray-500">
+            {user ? user.name : "Please Login Buddy"}
+          </div>
         </div>
         {loginError && (
           <div className="text-red-600 text-xs">Please Sign In</div>
@@ -60,14 +55,14 @@ const LiveChat = ({ loggedUserName, loggedUserProfile }) => {
           className=" flex flex-col items-center"
           onSubmit={(e) => {
             e.preventDefault();
-            loggedInUser
+            user
               ? sendMessage !== ""
                 ? dispatch(
                     addMessage({
-                      name: loggedUserName,
+                      name: user.name,
                       message: sendMessage,
                     })
-                  )
+                  ) && setError(false)
                 : setError(true) && setLoginError(false)
               : setLoginError(true) && setError(false);
             setSendMessage("");
@@ -77,11 +72,11 @@ const LiveChat = ({ loggedUserName, loggedUserProfile }) => {
             className=" w-4/5 bg-transparent placeholder:text-sm placeholder:font-semibold border border-x-0 border-t-0  border-b-gray-400 outline-0 focus:border-b-blue-600 duration-700"
             type="text"
             placeholder="Say something..."
-            value={loggedInUser ? sendMessage : ""}
+            value={user ? sendMessage : ""}
             onChange={(e) => setSendMessage(e.target.value)}
           />
           {error && (
-            <div className="text-red-600 text-xs">Enter valid Message</div>
+            <div className="text-red-600 text-xs">Can't Send Empty Message</div>
           )}
           <button className=" mr-10 mt-2 p-2 hover:bg-blue-300 rounded-lg self-end">
             <img

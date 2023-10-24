@@ -11,6 +11,10 @@ const searchSlice = createSlice({
       // const keys = Object.keys(state.results);
       state.results = { ...state.results, ...action.payload };
       // keys.length > 5 && delete state.results[keys[0]];
+      //< Immer is doing like this ⬇️>>
+      // const old = { ...state };
+      // old.results = { ...old.results, ...action.payload };
+      // return old;
     },
   },
 });

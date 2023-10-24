@@ -11,7 +11,7 @@ const VideoCard = ({ info }) => {
         src={thumbnails.medium.url}
       />
       <ul>
-        <li className="font-bold py-2">{title}</li>
+        <li className="font-semibold text-sm overflow-clip py-2">{title}</li>
         <li className="text-gray-800 text-sm font-medium flex items-center gap-1">
           <img
             alt="thumbnail"
@@ -32,11 +32,11 @@ const VideoCard = ({ info }) => {
 
 export const withHighLikes = (VideoCard) => {
   return ({ info }) => {
-    const { statistics } = info;
+    ///const { statistics } = info;
     return (
       <div>
-        <label className="absolute bg-yellow-300 p-2 rounded-lg z-0 font-bold text-black">
-          ❤️ {statistics.likeCount}K Likes
+        <label className="absolute bg-yellow-300 p-2 rounded-lg z-0 text-sm font-bold text-black">
+          High ❤️
         </label>
         <VideoCard info={info} />
       </div>

@@ -1,110 +1,130 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useRef } from "react";
 import { addUser } from "../utils/userSlice";
 import UserContext from "../utils/UserContext";
-import { useDispatch, useSelector } from "react-redux";
-import InputForSign from "./InputForSign";
+import { useDispatch } from "react-redux";
 import LoginError from "./LoginError";
+import { checkValidData } from "../utils/validate";
+import { auth } from "../utils/firebase";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { USER_PROFILE } from "../utils/constants";
 
 const SignUpPage = () => {
-  const [userName, setUserName] = useState("");
-
-  const [userPassword, setUserPassword] = useState("");
+  const userName = useRef(null);
+  const userEmail = useRef(null);
+  const userPassword = useRef(null);
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [err, setErr] = useState(null);
 
-  const [userEmail, setUserEmail] = useState("");
+  const [firebaseError, setFirebaseError] = useState(null);
 
-  const [errorPassword, setErrorPassword] = useState(false);
-
-  const [emptyError, setEmptyError] = useState(false);
-
-  const [existError, setExistError] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const oldUsers = useSelector((store) => store.user.users);
-  //console.log(oldUsers);
+  const { setSignUpForm, signUpForm } = useContext(UserContext);
 
-  const { setSignUpForm, setSignInForm } = useContext(UserContext);
+  const handleForm = (e) => {
+    e.preventDefault();
 
+    const err = checkValidData(
+      userEmail.current.value,
+      userPassword.current.value
+    );
+    setErr(err);
+    if (err) return;
+    if (signUpForm) {
+      createUserWithEmailAndPassword(
+        auth,
+        userEmail.current.value,
+        userPassword.current.value
+      )
+        .then((userCredential) => {
+          // Signed up
+          const user = userCredential.user;
+          updateProfile(auth.currentUser, {
+            displayName: userName.current.value,
+            photoURL: USER_PROFILE,
+          })
+            .then(() => {
+              // Profile updated!
+              dispatch(
+                addUser({
+                  name: userName.current.value,
+                  email: userEmail.current.value,
+                  profile: USER_PROFILE,
+                })
+              );
+              navigate("/");
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        })
+        .catch((error) => {
+          setFirebaseError(error.message);
+        });
+    } else {
+      signInWithEmailAndPassword(
+        auth,
+        userEmail.current.value,
+        userPassword.current.value
+      )
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          navigate("/");
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          setFirebaseError(errorCode + "-" + error.message);
+        });
+    }
+  };
   return (
     <div className="flex flex-col ">
-      <form
-        id="signup"
-        onSubmit={(e) => {
-          e.preventDefault();
-          const oldUser = oldUsers.find((u) => u.email === userEmail);
-          if (
-            userName !== "" &&
-            userEmail !== "" &&
-            userPassword !== "" &&
-            confirmPassword !== ""
-          ) {
-            if (userPassword === confirmPassword) {
-              if (oldUser) {
-                if (oldUser.email !== userEmail) {
-                  dispatch(
-                    addUser({
-                      name: userName,
-                      email: userEmail,
-                      password: userPassword,
-                    })
-                  );
-                  setSignInForm(true);
-                  setSignUpForm(false);
-                } else {
-                  setExistError(true);
-                }
-              } else {
-                dispatch(
-                  addUser({
-                    name: userName,
-                    email: userEmail,
-                    password: userPassword,
-                  })
-                );
-                setSignInForm(true);
-                setSignUpForm(false);
-              }
-            } else {
-              setEmptyError(false);
-              setErrorPassword(true);
-            }
-          } else {
-            setErrorPassword(false);
-            setEmptyError(true);
-          }
-        }}
-      >
-        <h1 className="text-center text-lg font-bold text-red-500 [text-shadow:_0_5px_2px_gray]">
-          Welcome to <span className="text-blue-500">Sign Up</span>
-        </h1>
-        <InputForSign
-          labelName={"UserName"}
-          placeholderName={"Type Your Name..."}
-          typeName={"text"}
-          value={userName}
-          setValue={setUserName}
-        />
-        <InputForSign
-          labelName={"Email"}
-          placeholderName={"eg.. surjith123@gmail.com"}
-          typeName={"email"}
-          value={userEmail}
-          setValue={setUserEmail}
-        />
-        {existError && (
-          <LoginError errorMessage={"Your account already registered"} />
+      <form onSubmit={handleForm}>
+        {signUpForm ? (
+          <h1 className="text-center text-lg font-bold text-red-500 [text-shadow:_0_5px_2px_gray]">
+            Welcome to <span className="text-blue-500">Sign Up</span>
+          </h1>
+        ) : (
+          <h1 className="skew-x-12 text-lg text-center font-bold text-red-600  [text-shadow:_0_5px_2px_gray]">
+            Welcome <span className="text-green-700">Buddy</span> 🫰
+          </h1>
         )}
+        {signUpForm && (
+          <div className="flex flex-col mt-3">
+            <label className="font-medium text-sm">UserName</label>
+            <input
+              ref={userName}
+              placeholder="Type Your Name..."
+              className="text-gray-700 placeholder:text-sm border-b border-gray-500  bg-transparent focus:outline-none "
+              type="text"
+            />
+          </div>
+        )}
+        <div className="flex flex-col mt-3">
+          <label className="font-medium text-sm">Email</label>
+          <input
+            ref={userEmail}
+            placeholder="eg.. surjith123@gmail.com"
+            className="text-gray-700 placeholder:text-sm border-b border-gray-500  bg-transparent focus:outline-none "
+            type="text"
+          />
+        </div>
         <div>
           <label className="font-medium text-sm">Password</label>
           <div className="border-b border-gray-500 flex justify-between ">
             <input
+              ref={userPassword}
               placeholder="Enter password"
               className="text-gray-700 placeholder:text-sm bg-transparent focus:outline-none "
-              value={userPassword}
-              onChange={(e) => setUserPassword(e.target.value)}
               type={showPassword ? "text" : "password"}
             />
             <span
@@ -117,34 +137,23 @@ const SignUpPage = () => {
             </span>
           </div>
         </div>
-        <InputForSign
-          labelName={"Confirm password"}
-          placeholderName={"Confirm password"}
-          typeName={"password"}
-          value={confirmPassword}
-          setValue={setConfirmPassword}
-        />
-        {errorPassword && (
-          <LoginError errorMessage={"Password doesn't match"} />
-        )}
-
+        <LoginError errorMessage={err} />
         <button className="font-semibold mt-5 hover:bg-blue-300 bg-slate-300 block w-full  py-1 my-2 rounded-lg">
-          Sign Up
+          {signUpForm ? "Sign Up" : "Sign In"}
         </button>
-        {emptyError && (
-          <LoginError errorMessage={" Please Fill all input fields"} />
-        )}
+        <LoginError errorMessage={firebaseError} />
       </form>
+
       <div className="font-semibold text-sm">
-        Already have account?
+        {signUpForm ? "Already have " : "Create a new "}account ?
         <span
           onClick={() => {
-            setSignUpForm(false);
-            setSignInForm(true);
+            setSignUpForm(!signUpForm);
+            setFirebaseError(null);
           }}
           className="text-blue-500 text-base cursor-pointer mx-1"
         >
-          Sign In
+          {signUpForm ? "Sign In" : "Sign Up"}
         </span>
       </div>
     </div>

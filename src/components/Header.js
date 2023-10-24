@@ -1,53 +1,28 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { closeUserForm, openMenu, toggleMenu } from "../utils/appSlice";
-import {
-  DEFAULT_PROFILE,
-  USER_PROFILE,
-  YOUTUBE_SEARCH_API,
-} from "../utils/constants";
-import { cacheResults } from "../utils/searchSlice";
-import { Link } from "react-router-dom";
+import { DEFAULT_PROFILE } from "../utils/constants";
+import { Link, useNavigate } from "react-router-dom";
 import UserContext from "../utils/UserContext";
 import { toggleUserForm } from "../utils/appSlice";
 import UserPage from "./UserPage";
+import SearchBar from "./SearchBar";
 
 const Header = () => {
-  const [search, setSearch] = useState("");
-
-  const [searchSuggestion, setSearchSuggestion] = useState([]);
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const searchCache = useSelector((store) => store.search.results);
   const toggleForm = useSelector((store) => store.app.isUserFormOpen);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (searchCache[search]) {
-        setSearchSuggestion(searchCache[search]);
-      } else {
-        getSearchSuggestion();
-      }
-    }, 200);
+  const user = useSelector((store) => store.user.loginUser);
 
-    return () => clearTimeout(timer);
-  }, [search]);
-  const getSearchSuggestion = async () => {
-    const data = await fetch(YOUTUBE_SEARCH_API + search);
-    const json = await data.json();
-    setSearchSuggestion(json[1]);
-    dispatch(
-      cacheResults({
-        [search]: json[1],
-      })
-    );
-  };
-
-  const { suggestion, loggedInUser, setShowSuggestion, setShowLogin } =
-    useContext(UserContext);
+  const { setShowSuggestion } = useContext(UserContext);
 
   const toggleMenuHandler = () => dispatch(toggleMenu());
+
+  const handleLogin = () => {
+    navigate("/login");
+  };
 
   return (
     <div className="grid grid-flow-col fixed top-0 right-0 left-0 bg-white p-3 mx-1 z-10 shadow-lg">
@@ -67,7 +42,6 @@ const Header = () => {
         <Link
           onClick={() => {
             dispatch(openMenu());
-            setSearch("");
           }}
           className="mx-2"
           to="/"
@@ -83,69 +57,26 @@ const Header = () => {
         onClick={() => dispatch(closeUserForm())}
         className="w-full relative col-span-4 flex justify-center flex-col"
       >
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            setShowSuggestion(false);
-          }}
-          id="search"
-          className="flex"
-        >
-          <input
-            placeholder="Search"
-            className="w-full shadow-inner px-3 py-1 border border-gray-400 focus:outline-blue-300 rounded-l-full"
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            onFocus={() => setShowSuggestion(true)}
-          />
-          <Link to={"/results?search_query=" + search}>
-            <button className="w-14 p-2 bg-gray-200 border border-gray-400 hover:bg-gray-300 rounded-r-full">
-              <img
-                className="m-auto h-5"
-                alt="search"
-                src="https://cdn-icons-png.flaticon.com/512/2811/2811806.png"
-              />
-            </button>
-          </Link>
-        </form>
-        {search !== "" && suggestion && (
-          <div className="absolute top-12 w-[91%]  bg-white py-2 shadow-lg rounded-lg border border-gray-200">
-            <ul>
-              {searchSuggestion.map((s) => (
-                <li key={s} onClick={() => setShowSuggestion(false)}>
-                  <Link
-                    to={"/results?search_query=" + s}
-                    className="flex my-1 py-2 hover:bg-gray-200 items-center font-semibold"
-                  >
-                    <img
-                      className="h-5 px-2"
-                      alt="search"
-                      src="https://cdn-icons-png.flaticon.com/512/2811/2811806.png"
-                    />
-                    {s}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        <SearchBar />
       </div>
       <div
         onClick={() => setShowSuggestion(false)}
         className="flex justify-end items-center col-span-4 p-1 "
       >
-        {loggedInUser ? (
-          <img
-            onClick={() => dispatch(toggleUserForm())}
-            className="h-8 rounded-full cursor-pointer"
-            alt="User"
-            src={USER_PROFILE}
-          />
+        {user ? (
+          <>
+            <img
+              onClick={() => dispatch(toggleUserForm())}
+              className="h-8 rounded-full cursor-pointer"
+              alt="User"
+              src={user.profile}
+            />
+            {toggleForm && <UserPage />}
+          </>
         ) : (
           <div
-            className="flex font-semibold text-blue-500 cursor-pointer border items-center border-blue-600 rounded-full p-1"
-            onClick={() => setShowLogin(true)}
+            className="flex font-semibold text-blue-500 cursor-pointer border-2 items-center border-blue-600 rounded-full p-1"
+            onClick={handleLogin}
           >
             <img
               className="h-6 rounded-full cursor-pointer"
@@ -155,8 +86,6 @@ const Header = () => {
             <span>Sign In</span>
           </div>
         )}
-
-        {toggleForm && <UserPage />}
       </div>
     </div>
   );

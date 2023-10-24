@@ -3,51 +3,11 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import WatchPage from "./components/WatchPage";
-import MainContainer from "./components/MainContainer";
-import { lazy } from "react";
-import { Suspense } from "react";
-
-const SearchResults = lazy(() => import("./components/SearchResults"));
-
-const Body = lazy(() => import("./components/Body"));
-
-const appRouter = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-    children: [
-      {
-        path: "/",
-        element: <Body />,
-        children: [
-          {
-            path: "/",
-            element: <MainContainer />,
-          },
-          {
-            path: "/watch",
-            element: <WatchPage />,
-          },
-          {
-            path: "/results",
-            element: (
-              <Suspense>
-                <SearchResults />
-              </Suspense>
-            ),
-          },
-        ],
-      },
-    ],
-  },
-]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={appRouter} />
+    <App />
   </React.StrictMode>
 );
 
