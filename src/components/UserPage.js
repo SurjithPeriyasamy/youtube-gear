@@ -1,20 +1,15 @@
 import React from "react";
-import UserContext from "../utils/UserContext";
-import { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeUser } from "../utils/userSlice";
 import { signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
 
 const UserPage = () => {
-  const { setShowLogin } = useContext(UserContext);
-
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user.loginUser);
   const handleSignOut = () => {
     signOut(auth)
       .then(() => {
-        setShowLogin(false);
         dispatch(removeUser());
       })
       .catch((error) => {});
