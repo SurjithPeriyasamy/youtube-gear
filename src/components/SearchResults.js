@@ -2,6 +2,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import SearchVideoCard from "./SearchVideoCard";
 import { SEARCH_RESULT_API } from "../utils/constants";
 import { useEffect, useState } from "react";
+import ShimmerUi from "./ShimmerUi";
 
 const SearchResults = () => {
   const [videos, setVideos] = useState([]);
@@ -19,7 +20,7 @@ const SearchResults = () => {
     const json = await data.json();
     setVideos(json.items);
   };
-
+  if (videos.length === 0) return <ShimmerUi />;
   return (
     <div className="flex flex-col m-auto">
       {videos.map((video) => (

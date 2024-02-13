@@ -19,7 +19,7 @@ const ChatMessage = ({ name, text, user }) => {
       </div>
       <div>
         <span className="font-semibold text-base pr-3"> {name}</span>
-        <span className="text-sm">{text}</span>
+        <span className="text-sm font-semibold text-gray-600">{text}</span>
       </div>
     </div>
   );

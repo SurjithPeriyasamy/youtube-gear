@@ -1,6 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { COMMENT_API } from "../utils/constants";
+import ShimmerUi from "./ShimmerUi";
 
 const Comment = ({ data }) => {
   const { textDisplay, authorDisplayName, authorProfileImageUrl } =
@@ -9,34 +10,63 @@ const Comment = ({ data }) => {
   return (
     <div className="my-3 flex items-center gap-3 p-1 rounded-lg">
       <div>
-        <img
-          className=" rounded-full"
-          alt="commentProfile"
-          src={authorProfileImageUrl}
-        />
+        {authorProfileImageUrl && (
+          <img
+            className=" rounded-full"
+            alt="commentProfile"
+            src={authorProfileImageUrl}
+          />
+        )}
       </div>
       <div>
-        <p className="font-semibold text-sm">@{authorDisplayName}</p>
+        <p className="font-semibold text-sm">{authorDisplayName}</p>
         <p className="text-xs font-medium ml-5">{textDisplay}</p>
       </div>
     </div>
   );
 };
 
-const CommentsList = ({ comments, i }) => {
-  return comments.map((comment, index) => (
-    <div key={comment.id}>
+const CommentBox = ({ comment, handle, rep }) => {
+  return (
+    <div>
       <Comment data={comment} />
       {comment.replies && (
-        <div className="ml-10 my-2 pl-3 border-l border-l-gray-500 ">
-          <div className="cursor-pointer font-medium text-blue-600">
-            Replies ({comment.replies.comments.length}) ⬇
+        <div className="ml-20 my-2 pl-3 border-l border-l-gray-500 ">
+          <div
+            onClick={handle}
+            className="cursor-pointer font-medium text-blue-600"
+          >
+            Replies ({comment.replies.comments.length}) {rep ? "⬆️" : "⬇️"}
           </div>
-          <CommentsList i={index} comments={comment.replies.comments} />
+          {rep && <CommentsList comments={comment.replies.comments} />}
         </div>
       )}
     </div>
-  ));
+  );
+};
+const CommentsList = ({ comments }) => {
+  const [showIndex, setShowIndex] = useState(null);
+
+  const handleShow = (index) => {
+    if (showIndex !== index) {
+      setShowIndex(index);
+    } else {
+      setShowIndex(null);
+    }
+  };
+  return comments.length === 0 ? (
+    <ShimmerUi />
+  ) : (
+    comments?.map((comment, index) => (
+      <CommentBox
+        key={comment.id}
+        rep={index === showIndex ? true : false}
+        handle={() => handleShow(index)}
+        comment={comment}
+        index={index}
+      />
+    ))
+  );
 };
 
 const CommentsContainer = ({ videoId }) => {
@@ -51,10 +81,19 @@ const CommentsContainer = ({ videoId }) => {
     const json = await data.json();
     setCommentsData(json.items);
   };
+
   return (
     <div>
-      <h1 className="font-bold m-1 text-lg">Comments:</h1>
-      <CommentsList comments={commentsData} />
+      <h1 className="font-bold m-1 ml-3 mt-3 text-2xl tracking-wider">
+        {commentsData && commentsData.length} Comments
+      </h1>
+      {commentsData ? (
+        <CommentsList comments={commentsData} />
+      ) : (
+        <h2 className="text-lg font-semibold ml-10 text-red-600">
+          This Video Has Disabled the Comments
+        </h2>
+      )}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React from "react";
 
 const SearchVideoCard = ({ info }) => {
-  const { channelTitle, thumbnails, title } = info.snippet;
+  const { channelTitle, thumbnails, title } = info?.snippet;
   return (
     <div className="flex w-56 flex-col md:flex-row md:w-full  ">
       <img

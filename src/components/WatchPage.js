@@ -7,6 +7,9 @@ import { useVideosApi } from "../utils/useVideosApi";
 import CommentsContainer from "./CommentsContainer";
 import LiveChat from "./LiveChat";
 import { WATCH_VIDEO_API } from "../utils/constants";
+import { BiLike } from "react-icons/bi";
+import { BiDislike } from "react-icons/bi";
+import { FaUsersViewfinder } from "react-icons/fa6";
 
 const WatchPage = () => {
   const [searchParams] = useSearchParams();
@@ -35,11 +38,12 @@ const WatchPage = () => {
 
   const suggestionVideos = useVideosApi();
 
-  if (watchVideo === null) {
+  if (!watchVideo) {
     return <div>Nothing can get Details</div>;
   }
 
   const { title, channelTitle, thumbnails } = watchVideo?.snippet;
+  const { likeCount, viewCount } = watchVideo?.statistics;
 
   return (
     <div className="w-full px-3 my-2">
@@ -47,7 +51,7 @@ const WatchPage = () => {
         <div className="flex flex-wrap lg:flex-nowrap">
           <div className="w-full">
             <iframe
-              className="w-full aspect-video "
+              className="w-full aspect-video rounded-2xl"
               src={"https://www.youtube.com/embed/" + param}
               title="YouTube video player"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -56,21 +60,36 @@ const WatchPage = () => {
             ></iframe>
             <div className="font-semibold my-2">
               <h1 className="text-xl mb-4">{title}</h1>
-              <div className="flex gap-2">
+              <div className="flex gap-2 pr-10">
                 <img
                   className="rounded-full h-9 w-9"
                   alt="channel"
                   src={thumbnails.default.url}
                 />
-                <div className="text-lg flex gap-1 items-center">
+                <div className="flex gap-1 items-center w-fit">
                   <span>{channelTitle}</span>
                   <span>
                     <img
-                      className="h-3 "
+                      className="h-3 w-3"
                       alt="verify"
                       src="https://img.freepik.com/free-icon/check-mark_318-82621.jpg?t=st=1692436411~exp=1692437011~hmac=0352088f7f284ddd21db2ec79f73b4ac6eb439443d1d1090121ec3f7f2c371ce"
                     />
                   </span>
+                </div>
+                <button className="py-2 h-fit mx-4 px-4 bg-gray-800 text-sm text-white rounded-full">
+                  Subscribe
+                </button>
+                <div className="text-lg flex gap-5 ml-auto items-center w-fit">
+                  <div className="flex gap-2 bg-gray-300 p-2 rounded-full text-sm items-center">
+                    <FaUsersViewfinder size={20} />
+                    {(viewCount / 1000).toFixed()}K views
+                  </div>
+                  <div className="flex items-center gap-4 bg-gray-300 p-2 rounded-full">
+                    <span className="flex gap-2 text-sm items-center border-r-2 border-gray-500 pr-3">
+                      <BiLike size={20} /> {(likeCount / 1000).toFixed()}K
+                    </span>
+                    <BiDislike size={20} />
+                  </div>
                 </div>
               </div>
             </div>

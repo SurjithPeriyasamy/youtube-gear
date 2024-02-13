@@ -37,21 +37,58 @@ const SearchBar = () => {
       {search !== "" && suggestion && (
         <div className="absolute top-12 w-[91%]  bg-white py-2 shadow-lg rounded-lg border border-gray-200">
           <ul>
-            {searchSuggestion.map((s) => (
-              <li key={s} onClick={() => setShowSuggestion(false)}>
-                <Link
-                  to={"/results?search_query=" + s}
-                  className="flex my-1 py-2 hover:bg-gray-200 items-center font-semibold"
-                >
-                  <img
-                    className="h-5 px-2"
-                    alt="search"
-                    src="https://cdn-icons-png.flaticon.com/512/2811/2811806.png"
-                  />
-                  {s}
-                </Link>
+            {searchSuggestion ? (
+              searchSuggestion.map((s) => (
+                <li key={s} onClick={() => setShowSuggestion(false)}>
+                  <Link
+                    to={"/results?search_query=" + s}
+                    className="flex my-1 py-2 hover:bg-gray-200 items-center font-semibold"
+                  >
+                    <img
+                      className="h-5 px-2"
+                      alt="search"
+                      src="https://cdn-icons-png.flaticon.com/512/2811/2811806.png"
+                    />
+                    {s}
+                  </Link>
+                </li>
+              ))
+            ) : (
+              <li className="text-red-600 px-3">
+                Sorry for Inconvinience!!! To See Suggestions Please Install
+                CORS Extension on your browser and turn on it.
+                <div className="flex flex-col">
+                  <a
+                    href="https://chromewebstore.google.com/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-blue-600"
+                  >
+                    Click for Chrome
+                  </a>
+                  <a
+                    href="https://addons.mozilla.org/en-US/firefox/addon/cors-everywhere/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-blue-600"
+                  >
+                    Click for FireFox
+                  </a>
+                  <a
+                    href="https://microsoftedge.microsoft.com/addons/detail/allow-cors-accesscontro/bhjepjpgngghppolkjdhckmnfphffdag"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-blue-600"
+                  >
+                    Click for Edge
+                  </a>
+                  <span className="text-black">Or</span>
+                  <p className="text-green-700 font-semibold">
+                    You can see other features of my app exclude search
+                  </p>
+                </div>
               </li>
-            ))}
+            )}
           </ul>
         </div>
       )}

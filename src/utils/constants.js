@@ -9,7 +9,7 @@ export const CATEGORIES_API =
   GOOGLE_API_KEY;
 
 export const YOUTUBE_SEARCH_API =
-  "https://suggestqueries.google.com/complete/search?client=firefox&ds=yt&q=";
+  "https://suggestqueries.google.com/complete/search?client=firefox&ds=yt&hl=en&q=";
 
 export const WATCH_VIDEO_API =
   "https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&key=" +
@@ -17,7 +17,7 @@ export const WATCH_VIDEO_API =
   "&id=";
 
 export const SEARCH_RESULT_API =
-  "https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&key=" +
+  "https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&type=video&key=" +
   GOOGLE_API_KEY +
   "&q=";
 

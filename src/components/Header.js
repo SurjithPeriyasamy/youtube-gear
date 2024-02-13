@@ -25,7 +25,7 @@ const Header = () => {
   };
 
   return (
-    <div className="grid grid-flow-col fixed top-0 right-0 left-0 bg-white p-3 mx-1 z-10 shadow-lg">
+    <div className="grid grid-flow-col fixed top-0 right-0 left-0 bg-white p-3 mx-1 shadow-lg z-40">
       <div
         onClick={() => {
           setShowSuggestion(false);

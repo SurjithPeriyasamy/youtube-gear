@@ -10,14 +10,18 @@ export const useSearchSuggestion = () => {
   const searchCache = useSelector((store) => store.search.results);
 
   const getSearchSuggestion = async () => {
-    const data = await fetch(YOUTUBE_SEARCH_API + search);
-    const json = await data.json();
-    setSearchSuggestion(json[1]);
-    dispatch(
-      cacheResults({
-        [search]: json[1],
-      })
-    );
+    try {
+      const data = await fetch(YOUTUBE_SEARCH_API + search);
+      const json = await data.json();
+      setSearchSuggestion(json[1]);
+      dispatch(
+        cacheResults({
+          [search]: json[1],
+        })
+      );
+    } catch (err) {
+      console.log(err);
+    }
   };
   useEffect(() => {
     const timer = setTimeout(() => {

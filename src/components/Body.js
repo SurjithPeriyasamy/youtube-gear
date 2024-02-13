@@ -44,7 +44,7 @@ const Body = () => {
           setShowSuggestion(false);
           dispatch(closeUserForm());
         }}
-        className="flex m-2 mt-20"
+        className="flex m-2 mt-20 justify-center"
       >
         <SideBar />
         <Outlet />

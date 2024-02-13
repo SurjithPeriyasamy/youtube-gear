@@ -87,15 +87,15 @@ const SignUpPage = () => {
     }
   };
   return (
-    <div className="flex flex-col ">
+    <div className="flex flex-col text-lg">
       <form onSubmit={handleForm}>
         {signUpForm ? (
-          <h1 className="text-center text-lg font-bold text-red-500 [text-shadow:_0_5px_2px_gray]">
-            Welcome to <span className="text-blue-500">Sign Up</span>
+          <h1 className="text-center text-xl font-bold text-red-500 ">
+            Welcome to <span className="text-blue-500 ">Sign Up</span>
           </h1>
         ) : (
-          <h1 className="skew-x-12 text-lg text-center font-bold text-red-600  [text-shadow:_0_5px_2px_gray]">
-            Welcome <span className="text-green-700">Buddy</span> 🫰
+          <h1 className=" text-lg text-center font-bold text-red-600  ">
+            Welcome <span className="text-green-700">Sign In</span> 🫰
           </h1>
         )}
         {signUpForm && (
@@ -104,17 +104,17 @@ const SignUpPage = () => {
             <input
               ref={userName}
               placeholder="Type Your Name..."
-              className="text-gray-700 placeholder:text-sm border-b border-gray-500  bg-transparent focus:outline-none "
+              className=" placeholder:text-sm placeholder:text-gray-500 placeholder:font-semibold border-b border-gray-500  bg-transparent focus:outline-none "
               type="text"
             />
           </div>
         )}
-        <div className="flex flex-col mt-3">
+        <div className="flex flex-col mt-3 mb-3">
           <label className="font-medium text-sm">Email</label>
           <input
             ref={userEmail}
             placeholder="eg.. surjith123@gmail.com"
-            className="text-gray-700 placeholder:text-sm border-b border-gray-500  bg-transparent focus:outline-none "
+            className=" placeholder:text-sm placeholder:text-gray-500 placeholder:font-semibold border-b border-gray-500  bg-transparent focus:outline-none "
             type="text"
           />
         </div>
@@ -124,7 +124,7 @@ const SignUpPage = () => {
             <input
               ref={userPassword}
               placeholder="Enter password"
-              className="text-gray-700 placeholder:text-sm bg-transparent focus:outline-none "
+              className=" placeholder:text-sm placeholder:text-gray-500 placeholder:font-semibold bg-transparent focus:outline-none "
               type={showPassword ? "text" : "password"}
             />
             <span

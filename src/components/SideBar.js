@@ -8,20 +8,24 @@ const SideBar = () => {
   //Early Return pattern
   if (!isMenuOpen) return null;
   return (
-    <div className="w-48 shadow-lg bg-gray-100 p-2 shrink-0">
-      <ul className="border border-b-gray-400 p-2">
+    <div
+      className={`absolute z-30 ${
+        isMenuOpen ? "left-0" : "-left-3/4"
+      } w-48 shadow-lg bg-white py-3 px-5 h-screen shrink-0`}
+    >
+      <ul className=" p-2">
         <li className="font-bold">
           <Link to="/">Home</Link>
         </li>
         <li>Shorts</li>
         <li>Subscription</li>
       </ul>
-      <ul className="border border-b-gray-400 p-2">
+      <ul className=" p-2">
         <li>Library</li>
         <li>History</li>
         <li>Your Videos</li>
       </ul>
-      <div className="border border-b-gray-400 p-2">
+      <div className=" p-2">
         <h1 className="font-semibold text-md">Subscription</h1>
         <ul>
           <li>Music</li>
@@ -30,7 +34,7 @@ const SideBar = () => {
           <li>Movies</li>
         </ul>
       </div>
-      <div className="border border-b-gray-400 p-2">
+      <div className=" p-2">
         <h1 className="font-semibold text-md">Explore</h1>
         <ul>
           <li>Trending</li>

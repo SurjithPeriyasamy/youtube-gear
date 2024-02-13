@@ -48,7 +48,9 @@ const LiveChat = ({ user }) => {
           </div>
         </div>
         {loginError && (
-          <div className="text-red-600 text-xs">Please Sign In</div>
+          <div className="text-red-600 text-xs font-semibold">
+            Please Sign In
+          </div>
         )}
         <form
           id="livechat"

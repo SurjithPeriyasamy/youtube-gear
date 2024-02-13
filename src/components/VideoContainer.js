@@ -10,11 +10,11 @@ const VideoContainer = () => {
   return videos.length === 0 ? (
     <ShimmerUi />
   ) : (
-    <div className="flex justify-center lg:justify-stretch flex-wrap">
+    <div className="flex justify-center flex-wrap max-w-screen-xl">
       {videos.map((video) => {
         return (
           <Link
-            className=" hover:shadow-[0_0_5px_0_gray] w-64 m-2 p-2 mr-2 shadow-lg rounded-lg"
+            className=" hover:shadow-[0_0_5px_0_gray] w-64 h-64 m-2 p-2 mr-2 shadow-lg rounded-lg"
             to={"/watch?v=" + video.id}
             key={video.id}
           >
