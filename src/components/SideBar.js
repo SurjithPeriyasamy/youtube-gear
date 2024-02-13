@@ -9,7 +9,7 @@ const SideBar = () => {
   if (!isMenuOpen) return null;
   return (
     <div
-      className={`absolute z-30 ${
+      className={`fixed z-30 ${
         isMenuOpen ? "left-0" : "-left-3/4"
       } w-48 shadow-lg bg-white py-3 px-5 h-screen shrink-0`}
     >

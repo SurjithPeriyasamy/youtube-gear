@@ -5,7 +5,7 @@ const SuggestVideos = ({ info }) => {
   const { title, channelTitle, thumbnails } = snippet;
 
   return (
-    <div className="flex ">
+    <div onClick={() => window.scrollTo(0, 0)} className="flex">
       <img
         alt="suggest"
         className="mr-2 h-24 rounded-lg"

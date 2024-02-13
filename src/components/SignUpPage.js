@@ -87,7 +87,7 @@ const SignUpPage = () => {
     }
   };
   return (
-    <div className="flex flex-col text-lg">
+    <div className="flex flex-col ">
       <form onSubmit={handleForm}>
         {signUpForm ? (
           <h1 className="text-center text-xl font-bold text-red-500 ">

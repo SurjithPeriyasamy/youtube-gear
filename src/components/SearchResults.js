@@ -20,7 +20,8 @@ const SearchResults = () => {
     const json = await data.json();
     setVideos(json.items);
   };
-  if (videos.length === 0) return <ShimmerUi />;
+
+  if (!videos) return <ShimmerUi />;
   return (
     <div className="flex flex-col m-auto">
       {videos.map((video) => (

@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import ChatMessage from "./ChatMessage";
 import { useDispatch, useSelector } from "react-redux";
 import { addMessage } from "../utils/chatSlice";
-import { generateRandomMessage, generateRandomName } from "../utils/helper";
+import {
+  displayImage,
+  generateRandomMessage,
+  generateRandomName,
+} from "../utils/helper";
 import { DEFAULT_PROFILE } from "../utils/constants";
 
 const LiveChat = ({ user }) => {
@@ -22,10 +26,11 @@ const LiveChat = ({ user }) => {
       dispatch(
         addMessage({
           name: generateRandomName(),
-          message: generateRandomMessage(23) + " 🏋️‍♂️",
+          message: generateRandomMessage(23),
+          photo: displayImage(),
         })
       );
-    }, 1000);
+    }, 2000);
 
     return () => clearInterval(interval);
   }, []);
@@ -33,7 +38,13 @@ const LiveChat = ({ user }) => {
     <div className=" mb-4 bg-gray-100 flex flex-col items-center shadow-lg rounded-lg">
       <div className="w-full shadow-lg rounded-lg  overflow-y-scroll h-[500px]  flex flex-col-reverse">
         {ChatMessages.map((cm, i) => (
-          <ChatMessage key={i} name={cm.name} user={user} text={cm.message} />
+          <ChatMessage
+            key={i}
+            name={cm.name}
+            user={user}
+            photo={cm.photo}
+            text={cm.message}
+          />
         ))}
       </div>
       <div className="my-1 w-full py-2 px-4">

@@ -1,7 +1,7 @@
-const GOOGLE_API_KEY = "AIzaSyDJbwbfxNRjS2scYESpxi1yDYA-L0HHc1A";
+const GOOGLE_API_KEY = "AIzaSyBbUuJfIamY3NNj-FQsI7R-zGpaw4rS5Rs";
 
 export const YOUTUBE_VIDEOS_API =
-  "https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&chart=mostPopular&maxResults=50&regionCode=IN&key=" +
+  "https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&chart=mostPopular&maxResults=50&regionCode=US&key=" +
   GOOGLE_API_KEY;
 
 export const CATEGORIES_API =

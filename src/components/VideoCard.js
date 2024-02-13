@@ -4,7 +4,7 @@ const VideoCard = ({ info }) => {
   const { snippet, statistics } = info;
   const { channelTitle, thumbnails, title } = snippet;
   return (
-    <div className="flex flex-col justify-between h-full">
+    <div className="flex select-none flex-col justify-between h-full">
       <div>
         <img
           alt="thumbnail"
@@ -35,7 +35,7 @@ export const withHighLikes = (VideoCard) => {
   return ({ info }) => {
     return (
       <>
-        <label className="absolute bg-yellow-300 p-2 rounded-lg z-0 text-sm font-bold text-black">
+        <label className="select-none absolute bg-yellow-300 p-2 rounded-lg z-0 text-sm font-bold text-black">
           High ❤️
         </label>
         <VideoCard info={info} />

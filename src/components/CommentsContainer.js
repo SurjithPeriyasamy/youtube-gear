@@ -2,23 +2,25 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { COMMENT_API } from "../utils/constants";
 import ShimmerUi from "./ShimmerUi";
+import { FaChevronDown } from "react-icons/fa";
+import { FaChevronUp } from "react-icons/fa";
 
 const Comment = ({ data }) => {
   const { textDisplay, authorDisplayName, authorProfileImageUrl } =
     data?.snippet?.topLevelComment?.snippet || data?.snippet;
 
   return (
-    <div className="my-3 flex items-center gap-3 p-1 rounded-lg">
-      <div>
+    <div className="my-3 flex items-center gap-3 p-1 rounded-lg w-full">
+      <div className=" h-10">
         {authorProfileImageUrl && (
           <img
-            className=" rounded-full"
+            className="min-w-10 h-full rounded-full"
             alt="commentProfile"
-            src={authorProfileImageUrl}
+            src={authorProfileImageUrl && authorProfileImageUrl}
           />
         )}
       </div>
-      <div>
+      <div className="w-3/4">
         <p className="font-semibold text-sm">{authorDisplayName}</p>
         <p className="text-xs font-medium ml-5">{textDisplay}</p>
       </div>
@@ -34,9 +36,14 @@ const CommentBox = ({ comment, handle, rep }) => {
         <div className="ml-20 my-2 pl-3 border-l border-l-gray-500 ">
           <div
             onClick={handle}
-            className="cursor-pointer font-medium text-blue-600"
+            className="flex items-center gap-2 cursor-pointer font-medium text-blue-600"
           >
-            Replies ({comment.replies.comments.length}) {rep ? "⬆️" : "⬇️"}
+            Replies ({comment.replies.comments.length}){" "}
+            {rep ? (
+              <FaChevronUp size={15} className="mt-1" />
+            ) : (
+              <FaChevronDown size={15} className="mt-1" />
+            )}
           </div>
           {rep && <CommentsList comments={comment.replies.comments} />}
         </div>
