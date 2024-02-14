@@ -12,13 +12,11 @@ const Comment = ({ data }) => {
   return (
     <div className="my-3 flex items-center gap-3 p-1 rounded-lg w-full">
       <div className=" h-10">
-        {authorProfileImageUrl && (
-          <img
-            className="min-w-10 h-full rounded-full"
-            alt="commentProfile"
-            src={authorProfileImageUrl && authorProfileImageUrl}
-          />
-        )}
+        <img
+          className="min-w-10 h-full rounded-full"
+          alt="commentProfile"
+          src={authorProfileImageUrl && authorProfileImageUrl}
+        />
       </div>
       <div className="w-3/4">
         <p className="font-semibold text-sm">{authorDisplayName}</p>

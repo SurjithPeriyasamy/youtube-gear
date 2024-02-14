@@ -5,7 +5,7 @@ import ShimmerUi from "./ShimmerUi";
 
 const VideoContainer = () => {
   const videos = useVideosApi();
-  console.log(videos);
+
   const HighLikesCard = withHighLikes(VideoCard);
   return videos.length === 0 ? (
     <ShimmerUi />

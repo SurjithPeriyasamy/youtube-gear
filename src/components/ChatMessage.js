@@ -7,7 +7,7 @@ const ChatMessage = ({ name, text, user, photo }) => {
         <img
           className="w-full h-full object-center rounded-full"
           alt="commentProfile"
-          src={user ? (name === user?.name ? user.profile : photo) : photo}
+          src={photo}
         />
       </div>
       <div className="flex gap-3 items-center">

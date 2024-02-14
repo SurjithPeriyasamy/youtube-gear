@@ -74,6 +74,7 @@ const LiveChat = ({ user }) => {
                     addMessage({
                       name: user.name,
                       message: sendMessage,
+                      photo: user.profile,
                     })
                   ) && setError(false)
                 : setError(true) && setLoginError(false)
