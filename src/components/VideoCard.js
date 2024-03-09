@@ -1,8 +1,10 @@
 import React from "react";
 
 const VideoCard = ({ info }) => {
-  const { snippet, statistics } = info;
-  const { channelTitle, thumbnails, title } = snippet;
+  const {
+    snippet: { channelTitle, thumbnails, title },
+    statistics,
+  } = info;
   return (
     <div className="flex select-none flex-col justify-between h-full">
       <div>
